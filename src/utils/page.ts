@@ -327,16 +327,17 @@ function getDays(
   return days;
 }
 
-function formatWithBuddhistYear(date: Date, format: string, locale: Locale, buddhist: boolean) {
+
+
+function formatWithBuddhistYear(date: Date, format: string, locale: Locale) {
+  const { buddhist } = useCalendar()
   const formattedDate = locale.formatDate(date, format);
   const year = date.getFullYear();
-  const buddhistYear = year + 543;
+  const buddhistYear = year + (buddhist.value ? 543 : 0) ;
 
   // Replace the Gregorian year with the Buddhist year if the `buddhist` flag is true
   return buddhist ? formattedDate.replace(year.toString(), buddhistYear.toString()) : formattedDate;
 }
-
-const {buddhist} = useCalendar()
 
 function getWeeks(
   days: CalendarDay[],
@@ -370,13 +371,12 @@ function getWeeks(
   result.forEach(week => {
     const fromDay = week.days[0];
     const toDay = week.days[week.days.length - 1];
-    const buddhistValue = buddhist.value;
     if (fromDay.month === toDay.month) {
-      week.title = formatWithBuddhistYear(fromDay.date, 'MMMM YYYY' , locale, buddhistValue );
+      week.title = formatWithBuddhistYear(fromDay.date, 'MMMM YYYY' , locale );
     } else if (fromDay.year === toDay.year) {
-      week.title = `${formatWithBuddhistYear(fromDay.date, 'MMM', locale, buddhistValue)} - ${formatWithBuddhistYear(toDay.date, 'MMM YYYY', locale, buddhistValue)}`;
+      week.title = `${formatWithBuddhistYear(fromDay.date, 'MMM', locale)} - ${formatWithBuddhistYear(toDay.date, 'MMM YYYY', locale)}`;
     } else {
-      week.title = `${formatWithBuddhistYear(fromDay.date, 'MMM YYYY', locale, buddhistValue)} - ${formatWithBuddhistYear(toDay.date, 'MMM YYYY', locale, buddhistValue)}`;
+      week.title = `${formatWithBuddhistYear(fromDay.date, 'MMM YYYY', locale)} - ${formatWithBuddhistYear(toDay.date, 'MMM YYYY', locale)}`;
     }
   });
   return result;
