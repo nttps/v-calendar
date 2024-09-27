@@ -547,16 +547,21 @@ export function getCachedPage(config: PageConfig, locale: Locale): CachedPage {
   const days = getDays({ monthComps, prevMonthComps, nextMonthComps }, locale);
   const weeks = getWeeks(days, showWeeknumbers, showIsoWeeknumbers, locale);
   const weekdays = getWeekdays(weeks[0], locale);
+  const yearTransform = year + ((buddhist.value) ? 543 : 0)
+  let titleTransform = locale.formatDate(date, locale.masks.title);
+  if (buddhist.value) {
+    titleTransform = `${titleTransform.split(' ')[0]} ${yearTransform}`;
+  }
 
   return {
     id: getPageKey(config),
     month,
     year,
-    monthTitle: locale.formatDate(date, locale.masks.title),
+    monthTitle: titleTransform,
     shortMonthLabel: locale.formatDate(date, 'MMM'),
     monthLabel: locale.formatDate(date, 'MMMM'),
-    shortYearLabel: year.toString().substring(2),
-    yearLabel: year.toString(),
+    shortYearLabel:  yearTransform.toString().substring(2),
+    yearLabel:  yearTransform.toString(),
     monthComps,
     prevMonthComps,
     nextMonthComps,
