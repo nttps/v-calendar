@@ -33,6 +33,10 @@ export const propsDef = {
   minDate: null,
   maxDate: null,
   disabledDates: null,
+  buddhist: {
+    type: Boolean,
+    default: false,
+  },
 };
 
 export type BaseProps = Readonly<ExtractPropTypes<typeof propsDef>>;
@@ -68,6 +72,8 @@ export function createBase(props: BaseProps) {
 
   const minDate = computed(() => props.minDate);
   const maxDate = computed(() => props.maxDate);
+
+  const buddhist = computed(() => props.buddhist);
 
   const disabledDates = computed(() => {
     const dates: any[] = props.disabledDates ? [...props.disabledDates] : [];
@@ -113,6 +119,7 @@ export function createBase(props: BaseProps) {
     maxDate,
     disabledDates,
     disabledAttribute,
+    buddhist,
   };
   provide(contextKey, context);
   return context;

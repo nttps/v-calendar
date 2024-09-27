@@ -77,7 +77,7 @@ import CalendarSlot from './CalendarSlot.vue';
 
 export type IQuerySelector = Pick<HTMLElement, 'querySelector'>;
 
-const { masks, move } = useCalendar();
+const { masks, move, buddhist } = useCalendar();
 const { page, getMonthItems, getYearItems } = usePage();
 
 const monthMode = ref(true);
@@ -236,8 +236,10 @@ const lastYear = computed(() => last(yearItems.value.map(i => i.year)));
 
 const title = computed(() => {
   return monthMode.value
-    ? selectedYear.value
-    : `${firstYear.value} - ${lastYear.value}`;
+    ? selectedYear.value + (buddhist ? 543 : 0)
+    : `${(firstYear.value ?? 0) + (buddhist ? 543 : 0)} - ${
+        (lastYear.value ?? 0) + (buddhist ? 543 : 0)
+      }`;
 });
 
 watchEffect(() => {

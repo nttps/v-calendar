@@ -121,6 +121,10 @@ export const propsDef = {
   attributes: Array as PropType<Array<AttributeConfig>>,
   trimWeeks: Boolean,
   disablePageSwipe: Boolean,
+  buddhist: {
+    type: Boolean,
+    default: false,
+  },
 };
 
 export const emitsDef = [
@@ -205,6 +209,8 @@ export function createCalendar(
   const isMonthly = computed(() => _view.value === 'monthly');
   const isWeekly = computed(() => _view.value === 'weekly');
   const isDaily = computed(() => _view.value === 'daily');
+
+  const buddhist = computed(() => props.buddhist);
 
   // #endregion Computed
 
@@ -738,6 +744,7 @@ export function createCalendar(
     dayCells,
     count,
     step,
+    buddhist,
     firstPage,
     lastPage,
     canMovePrev,
