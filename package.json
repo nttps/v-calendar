@@ -1,7 +1,7 @@
 {
   "name": "v-calendar-ckc",
   "type": "module",
-  "version": "3.0.0-alpha.9",
+  "version": "3.0.0-alpha.10",
   "description": "A calendar and date picker plugin for Vue.js.",
   "author": "Nateetorn Preansri <teamerze@gmail.com>",
   "repository": {
