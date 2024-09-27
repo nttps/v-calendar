@@ -1,8 +1,9 @@
 .DS_Store
 node_modules
 /dist
-docs/docs/.vitepress/dist
-docs/docs/.vitepress/cache
+docs/.vitepress/dist
+docs/.vitepress/cache
+docs/.vitepress/.temp
 
 # local env files
 .env.local
@@ -26,3 +27,5 @@ pnpm-debug.log*
 
 # Optional eslint cache
 .eslintcache
+# Local Netlify folder
+.netlify

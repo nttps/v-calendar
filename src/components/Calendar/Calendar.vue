@@ -5,11 +5,12 @@
     :class="[
       'vc-container',
       `vc-${view}`,
-      'vc-bordered',
       `vc-${color}`,
       `vc-${displayMode}`,
       {
-        'vc-expanded': isExpanded,
+        'vc-expanded': expanded,
+        'vc-bordered': !borderless,
+        'vc-transparent': transparent,
       },
     ]"
     @mouseup.prevent
@@ -18,7 +19,7 @@
     <!--Calendar Container-->
     <div :class="['vc-pane-container', { 'in-transition': inTransition }]">
       <div class="vc-pane-header-wrapper">
-        <CalendarHeader :page="firstPage!" is-lg hide-title />
+        <CalendarHeader v-if="firstPage" :page="firstPage!" is-lg hide-title />
       </div>
       <Transition
         :name="`vc-${transitionName}`"
@@ -33,42 +34,50 @@
             gridTemplateColumns: `repeat(${columns}, 1fr)`,
           }"
         >
-          <!--Calendar Panes-->
-          <CalendarPane v-for="page in pages" :key="page.id" :page="page" />
+          <!--Calendar pages-->
+          <CalendarPageProvider
+            v-for="page in pages"
+            :key="page.id"
+            :page="page"
+          >
+            <CalendarSlot name="page" :page="page">
+              <CalendarPage />
+            </CalendarSlot>
+          </CalendarPageProvider>
         </div>
       </Transition>
-      <slot name="footer" />
+      <CalendarSlot name="footer" />
     </div>
   </div>
   <!--Day popover-->
-  <CalendarDayPopover
-    ><template #default="props"
-      ><slot name="day-popover" v-bind="props" /></template
-  ></CalendarDayPopover>
+  <CalendarDayPopover />
   <!--Nav popover-->
   <CalendarNavPopover />
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import CalendarHeader from '../CalendarHeader/CalendarHeader.vue';
-import CalendarPane from '../CalendarPane/CalendarPane.vue';
-import CalendarNavPopover from '../CalendarNavPopover/CalendarNavPopover.vue';
-import CalendarDayPopover from '../CalendarDayPopover/CalendarDayPopover.vue';
-import { emitsDef, propsDef, createCalendar } from '../../use/calendar';
+import { createCalendar, emitsDef, propsDef } from '../../use/calendar';
+import CalendarDayPopover from './CalendarDayPopover.vue';
+import CalendarHeader from './CalendarHeader.vue';
+import CalendarNavPopover from './CalendarNavPopover.vue';
+import CalendarPage from './CalendarPage.vue';
+import CalendarPageProvider from './CalendarPageProvider.vue';
+import CalendarSlot from './CalendarSlot.vue';
 
 export default defineComponent({
-  name: 'Calendar',
   components: {
     CalendarHeader,
-    CalendarPane,
+    CalendarPage,
     CalendarNavPopover,
     CalendarDayPopover,
+    CalendarPageProvider,
+    CalendarSlot,
   },
-  emits: emitsDef,
   props: propsDef,
-  setup(props, { emit }) {
-    return createCalendar(props, { emit });
+  emit: emitsDef,
+  setup(props, { emit, slots }) {
+    return createCalendar(props, { emit, slots });
   },
 });
 </script>
@@ -88,33 +97,9 @@ export default defineComponent({
 
 .vc-pane-header-wrapper {
   position: absolute;
+  top: 0;
   width: 100%;
   pointer-events: none;
-}
-
-.vc-arrow {
-  grid-row: 1;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  cursor: pointer;
-  user-select: none;
-  pointer-events: auto;
-  color: var(--vc-header-arrow-color);
-  border-width: 1px;
-  border-style: solid;
-  border-radius: var(--vc-rounded);
-  border-color: transparent;
-  width: 28px;
-  height: 30px;
-  z-index: 1;
-  &:hover {
-    background: var(--vc-header-arrow-hover-bg);
-  }
-  &.vc-disabled {
-    opacity: 0.25;
-    pointer-events: none;
-  }
 }
 
 .vc-day-popover-container {
