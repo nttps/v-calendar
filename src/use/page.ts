@@ -21,7 +21,7 @@ export type CalendarPageContext = ReturnType<typeof createPage>;
 const contextKey = Symbol('__vc_page_context__');
 
 export function createPage(page: Ref<Page>) {
-  const { locale, getDateAddress, canMove, buddhist } = useCalendar();
+  const { locale, getDateAddress, canMove, isBuddhist } = useCalendar();
 
   function getMonthItems(year: number, mask: string): MonthNavItem[] {
     const { month: thisMonth, year: thisYear } = getDateAddress(new Date());
@@ -47,12 +47,12 @@ export function createPage(page: Ref<Page>) {
     const { year: thisYear } = getDateAddress(new Date());
     const { position } = page.value;
     const items = [];
-    console.log('year', thisYear, endYear, buddhist.value);
+    console.log('year', thisYear, endYear, isBuddhist.value);
 
     for (let year = startYear; year <= endYear; year += 1) {
       console.log(
         'year',
-        (Number(year) + (buddhist.value ? 543 : 0)).toString(),
+        (Number(year) + (isBuddhist.value ? 543 : 0)).toString(),
       );
       const enabled = [...Array(12).keys()].some(m =>
         canMove({ month: m + 1, year }, { position }),
@@ -60,7 +60,7 @@ export function createPage(page: Ref<Page>) {
       items.push({
         year,
         id: year.toString(),
-        label: (year + (buddhist.value ? 543 : 0)).toString(),
+        label: (year + (isBuddhist.value ? 543 : 0)).toString(),
         ariaLabel: year.toString(),
         isActive: year === page.value.year,
         isCurrent: year === thisYear,

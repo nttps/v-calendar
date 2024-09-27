@@ -210,7 +210,7 @@ export function createCalendar(
   const isWeekly = computed(() => _view.value === 'weekly');
   const isDaily = computed(() => _view.value === 'daily');
 
-  const buddhist = computed(() => props.buddhist);
+  const isBuddhist = computed(() => props.buddhist);
 
   // #endregion Computed
 
@@ -744,7 +744,7 @@ export function createCalendar(
     dayCells,
     count,
     step,
-    buddhist,
+    isBuddhist,
     firstPage,
     lastPage,
     canMovePrev,
