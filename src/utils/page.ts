@@ -1,3 +1,4 @@
+import { useCalendar } from '@/use/calendar';
 import {
   type DateParts,
   type DateSource,
@@ -326,6 +327,20 @@ function getDays(
   return days;
 }
 
+const { isBuddhist} = useCalendar();
+
+function formatWithBuddhistYear(date: Date, format: string, locale: Locale) {
+
+  const formattedDate = locale.formatDate(date, format);
+  const year = date.getFullYear();
+  const buddhistYear = year + (isBuddhist ? 543 : 0);
+
+  // Replace the Gregorian year with the Buddhist year if the `buddhist` flag is true
+  return isBuddhist
+    ? formattedDate.replace(year.toString(), buddhistYear.toString())
+    : formattedDate;
+}
+
 function getWeeks(
   days: CalendarDay[],
   showWeeknumbers: boolean,
@@ -362,7 +377,7 @@ function getWeeks(
     const fromDay = week.days[0];
     const toDay = week.days[week.days.length - 1];
     if (fromDay.month === toDay.month) {
-      week.title = `${locale.formatDate(fromDay.date, 'MMMM YYYY')}`;
+      week.title = `${formatWithBuddhistYear(fromDay.date, 'MMMM YYYY', locale)}`;
     } else if (fromDay.year === toDay.year) {
       week.title = `${locale.formatDate(
         fromDay.date,
@@ -561,6 +576,7 @@ export function getCachedPage(config: PageConfig, locale: Locale): CachedPage {
 
 export function getPage(config: PageConfig, cachedPage: CachedPage) {
   const { day, week, view, trimWeeks } = config;
+  console.log(view)
   const page: Page = {
     ...cachedPage,
     ...config,
@@ -605,5 +621,6 @@ export function getPage(config: PageConfig, cachedPage: CachedPage) {
       break;
     }
   }
+  console.log(page.title)
   return page;
 }

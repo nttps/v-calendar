@@ -47,13 +47,8 @@ export function createPage(page: Ref<Page>) {
     const { year: thisYear } = getDateAddress(new Date());
     const { position } = page.value;
     const items = [];
-    console.log('year', thisYear, endYear, isBuddhist.value);
 
     for (let year = startYear; year <= endYear; year += 1) {
-      console.log(
-        'year',
-        (Number(year) + (isBuddhist.value ? 543 : 0)).toString(),
-      );
       const enabled = [...Array(12).keys()].some(m =>
         canMove({ month: m + 1, year }, { position }),
       );

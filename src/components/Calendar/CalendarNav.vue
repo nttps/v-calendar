@@ -235,9 +235,6 @@ const firstYear = computed(() => head(yearItems.value.map(i => i.year)));
 const lastYear = computed(() => last(yearItems.value.map(i => i.year)));
 
 const title = computed(() => {
-  console.log(isBuddhist.value);
-  console.log((isBuddhist.value ? 543 : 0))
-
   return monthMode.value
     ? selectedYear.value + (isBuddhist.value ? 543 : 0)
     : `${(firstYear.value ?? 0) + (isBuddhist.value ? 543 : 0)} - ${
