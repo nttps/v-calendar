@@ -90,7 +90,7 @@ export function createCalendarNav(props: CalendarNavProps, { emit }: any) {
       items.push({
         year,
         id: year.toString(),
-        label: year  + ((props.buddhist) ? 543 : 0),
+        label: (year + ((props.buddhist) ? 543 : 0)).toString(),
         ariaLabel: year.toString(),
         isActive: year === currentYear.value,
         isCurrent: year === thisYear,
