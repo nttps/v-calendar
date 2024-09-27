@@ -2871,7 +2871,7 @@ util-deprecate@^1.0.1, util-deprecate@^1.0.2:
   integrity sha512-EPD5q1uXyFxJpCrLnCc1nHnq3gOa6DZBocAIiI2TaSCA7VCJ1UJDMagCzIkXNsUYfD1daK//LTEQ8xiIbrHtcw==
 
 "v-calendar-ckc@file:":
-  version "3.0.0-alpha.9"
+  version "3.0.0-alpha.10"
   resolved "file:"
   dependencies:
     "@popperjs/core" "2.9.0"
