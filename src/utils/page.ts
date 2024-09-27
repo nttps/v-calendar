@@ -549,7 +549,7 @@ export function getPageKey(config: PageConfig) {
 export function getCachedPage(config: PageConfig, locale: Locale): CachedPage {
   const { month, year, showWeeknumbers, showIsoWeeknumbers } = config;
 
-  const buddhist = useCalendar().buddhist;
+  const { buddhist } = useCalendar();
 
   const date = new Date(year, month - 1, 15);
   const monthComps = locale.getMonthParts(month, year);
