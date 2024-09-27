@@ -136,6 +136,8 @@ export type CachedPage = Pick<
   | 'weekdays'
 >;
 
+const { buddhist } = useCalendar();
+
 const viewAddressKeys: Record<PageView, (keyof DateParts)[]> = {
   daily: ['year', 'month', 'day'],
   weekly: ['year', 'month', 'week'],
@@ -328,7 +330,7 @@ function getDays(
 }
 
 function formatWithBuddhistYear(date: Date, format: string, locale: Locale) {
-  const { buddhist } = useCalendar();
+
   const formattedDate = locale.formatDate(date, format);
   const year = date.getFullYear();
   const buddhistYear = year + (buddhist.value ? 543 : 0);
@@ -548,8 +550,6 @@ export function getPageKey(config: PageConfig) {
 
 export function getCachedPage(config: PageConfig, locale: Locale): CachedPage {
   const { month, year, showWeeknumbers, showIsoWeeknumbers } = config;
-
-  const { buddhist } = useCalendar();
 
   const date = new Date(year, month - 1, 15);
   const monthComps = locale.getMonthParts(month, year);
