@@ -16,7 +16,7 @@ export { default as set } from 'lodash/set';
 export { default as mapValues } from 'lodash/mapValues';
 export { default as defaults } from 'lodash/defaults';
 export { default as defaultsDeep } from 'lodash/defaultsDeep';
-import _has from 'lodash/has';
+export { default as has } from 'lodash/has';
 
 // Collection utils
 export { default as map } from 'lodash/map';
@@ -33,7 +33,7 @@ export const isObject = (value: unknown): value is Object =>
   getType(value) === 'Object';
 
 // Object utils
-export const has = _has;
+// export const has = _has; // Removed as it's now directly exported
 export const hasAny = (obj: object, props: string[]) =>
   _some(props, p => _has(obj, p));
 
@@ -199,4 +199,8 @@ export function hash(str: string): number {
   return hashcode;
 }
 
+
+function _has(obj: object, p: string): boolean {
+  throw new Error('Function not implemented.');
+}
 /* eslint-enable no-bitwise */
