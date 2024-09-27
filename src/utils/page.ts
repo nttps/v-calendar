@@ -1,3 +1,4 @@
+import { useCalendar } from '@/use/calendar';
 import {
   type DateParts,
   type DateSource,
@@ -326,6 +327,17 @@ function getDays(
   return days;
 }
 
+function formatWithBuddhistYear(date: Date, format: string, locale: Locale, buddhist: boolean) {
+  const formattedDate = locale.formatDate(date, format);
+  const year = date.getFullYear();
+  const buddhistYear = year + 543;
+
+  // Replace the Gregorian year with the Buddhist year if the `buddhist` flag is true
+  return buddhist ? formattedDate.replace(year.toString(), buddhistYear.toString()) : formattedDate;
+}
+
+const {buddhist} = useCalendar()
+
 function getWeeks(
   days: CalendarDay[],
   showWeeknumbers: boolean,
@@ -358,18 +370,13 @@ function getWeeks(
   result.forEach(week => {
     const fromDay = week.days[0];
     const toDay = week.days[week.days.length - 1];
+    const buddhistValue = buddhist.value;
     if (fromDay.month === toDay.month) {
-      week.title = `${locale.formatDate(fromDay.date, 'MMMM YYYY')}`;
+      week.title = formatWithBuddhistYear(fromDay.date, 'MMMM YYYY' , locale, buddhistValue );
     } else if (fromDay.year === toDay.year) {
-      week.title = `${locale.formatDate(
-        fromDay.date,
-        'MMM',
-      )} - ${locale.formatDate(toDay.date, 'MMM YYYY')}`;
+      week.title = `${formatWithBuddhistYear(fromDay.date, 'MMM', locale, buddhistValue)} - ${formatWithBuddhistYear(toDay.date, 'MMM YYYY', locale, buddhistValue)}`;
     } else {
-      week.title = `${locale.formatDate(
-        fromDay.date,
-        'MMM YYYY',
-      )} - ${locale.formatDate(toDay.date, 'MMM YYYY')}`;
+      week.title = `${formatWithBuddhistYear(fromDay.date, 'MMM YYYY', locale, buddhistValue)} - ${formatWithBuddhistYear(toDay.date, 'MMM YYYY', locale, buddhistValue)}`;
     }
   });
   return result;
@@ -530,6 +537,9 @@ export function getPageKey(config: PageConfig) {
 
 export function getCachedPage(config: PageConfig, locale: Locale): CachedPage {
   const { month, year, showWeeknumbers, showIsoWeeknumbers } = config;
+
+
+
   const date = new Date(year, month - 1, 15);
   const monthComps = locale.getMonthParts(month, year);
   const prevMonthComps = locale.getPrevMonthParts(month, year);
@@ -537,6 +547,7 @@ export function getCachedPage(config: PageConfig, locale: Locale): CachedPage {
   const days = getDays({ monthComps, prevMonthComps, nextMonthComps }, locale);
   const weeks = getWeeks(days, showWeeknumbers, showIsoWeeknumbers, locale);
   const weekdays = getWeekdays(weeks[0], locale);
+
   return {
     id: getPageKey(config),
     month,

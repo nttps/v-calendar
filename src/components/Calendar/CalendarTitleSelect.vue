@@ -16,7 +16,7 @@ const props = defineProps({
   monthFormat: { type: String, default: 'MMMM' },
 });
 
-const { move, minPage, maxPage, buddhist } = useCalendar();
+const { move, minPage, maxPage } = useCalendar();
 const { page, getMonthItems, getYearItems } = usePage();
 
 const value = ref(getPageId(page.value.month, page.value.year));
