@@ -49,16 +49,18 @@ export function createPage(page: Ref<Page>) {
     const items = [];
     console.log('year', thisYear, endYear, buddhist.value);
 
-
     for (let year = startYear; year <= endYear; year += 1) {
-      console.log('year', (Number(year) + (buddhist.value ? 543 : 0)).toString());
+      console.log(
+        'year',
+        (Number(year) + (buddhist.value ? 543 : 0)).toString(),
+      );
       const enabled = [...Array(12).keys()].some(m =>
         canMove({ month: m + 1, year }, { position }),
       );
       items.push({
         year,
         id: year.toString(),
-        label: (year + ((buddhist.value) ? 543 : 0)).toString(),
+        label: (year + (buddhist.value ? 543 : 0)).toString(),
         ariaLabel: year.toString(),
         isActive: year === page.value.year,
         isCurrent: year === thisYear,

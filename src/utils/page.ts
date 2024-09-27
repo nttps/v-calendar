@@ -327,16 +327,16 @@ function getDays(
   return days;
 }
 
-
-
 function formatWithBuddhistYear(date: Date, format: string, locale: Locale) {
-  const { buddhist } = useCalendar()
+  const { buddhist } = useCalendar();
   const formattedDate = locale.formatDate(date, format);
   const year = date.getFullYear();
-  const buddhistYear = year + (buddhist.value ? 543 : 0) ;
+  const buddhistYear = year + (buddhist.value ? 543 : 0);
 
   // Replace the Gregorian year with the Buddhist year if the `buddhist` flag is true
-  return buddhist ? formattedDate.replace(year.toString(), buddhistYear.toString()) : formattedDate;
+  return buddhist
+    ? formattedDate.replace(year.toString(), buddhistYear.toString())
+    : formattedDate;
 }
 
 function getWeeks(
@@ -345,38 +345,49 @@ function getWeeks(
   showIsoWeeknumbers: boolean,
   locale: Locale,
 ): CalendarWeek[] {
-  const result = days.reduce((result: CalendarWeek[], day: CalendarDay, i) => {
-    const weekIndex = Math.floor(i / 7);
-    let week = result[weekIndex];
-    if (!week) {
-      week = {
-        id: `week-${weekIndex + 1}`,
-        title: '',
-        week: day.week,
-        weekPosition: day.weekPosition,
-        weeknumber: day.weeknumber,
-        isoWeeknumber: day.isoWeeknumber,
-        weeknumberDisplay: showWeeknumbers
-          ? day.weeknumber
-          : showIsoWeeknumbers
-          ? day.isoWeeknumber
-          : undefined,
-        days: [],
-      };
-      result[weekIndex] = week;
-    }
-    week.days.push(day);
-    return result;
-  }, Array(days.length / daysInWeek));
+  const result = days.reduce(
+    (result: CalendarWeek[], day: CalendarDay, i) => {
+      const weekIndex = Math.floor(i / 7);
+      let week = result[weekIndex];
+      if (!week) {
+        week = {
+          id: `week-${weekIndex + 1}`,
+          title: '',
+          week: day.week,
+          weekPosition: day.weekPosition,
+          weeknumber: day.weeknumber,
+          isoWeeknumber: day.isoWeeknumber,
+          weeknumberDisplay: showWeeknumbers
+            ? day.weeknumber
+            : showIsoWeeknumbers
+            ? day.isoWeeknumber
+            : undefined,
+          days: [],
+        };
+        result[weekIndex] = week;
+      }
+      week.days.push(day);
+      return result;
+    },
+    Array(days.length / daysInWeek),
+  );
   result.forEach(week => {
     const fromDay = week.days[0];
     const toDay = week.days[week.days.length - 1];
     if (fromDay.month === toDay.month) {
-      week.title = formatWithBuddhistYear(fromDay.date, 'MMMM YYYY' , locale );
+      week.title = formatWithBuddhistYear(fromDay.date, 'MMMM YYYY', locale);
     } else if (fromDay.year === toDay.year) {
-      week.title = `${formatWithBuddhistYear(fromDay.date, 'MMM', locale)} - ${formatWithBuddhistYear(toDay.date, 'MMM YYYY', locale)}`;
+      week.title = `${formatWithBuddhistYear(
+        fromDay.date,
+        'MMM',
+        locale,
+      )} - ${formatWithBuddhistYear(toDay.date, 'MMM YYYY', locale)}`;
     } else {
-      week.title = `${formatWithBuddhistYear(fromDay.date, 'MMM YYYY', locale)} - ${formatWithBuddhistYear(toDay.date, 'MMM YYYY', locale)}`;
+      week.title = `${formatWithBuddhistYear(
+        fromDay.date,
+        'MMM YYYY',
+        locale,
+      )} - ${formatWithBuddhistYear(toDay.date, 'MMM YYYY', locale)}`;
     }
   });
   return result;
@@ -538,7 +549,7 @@ export function getPageKey(config: PageConfig) {
 export function getCachedPage(config: PageConfig, locale: Locale): CachedPage {
   const { month, year, showWeeknumbers, showIsoWeeknumbers } = config;
 
-
+  const buddhist = useCalendar().buddhist;
 
   const date = new Date(year, month - 1, 15);
   const monthComps = locale.getMonthParts(month, year);
@@ -547,7 +558,7 @@ export function getCachedPage(config: PageConfig, locale: Locale): CachedPage {
   const days = getDays({ monthComps, prevMonthComps, nextMonthComps }, locale);
   const weeks = getWeeks(days, showWeeknumbers, showIsoWeeknumbers, locale);
   const weekdays = getWeekdays(weeks[0], locale);
-  const yearTransform = year + ((buddhist.value) ? 543 : 0)
+  const yearTransform = year + (buddhist.value ? 543 : 0);
   let titleTransform = locale.formatDate(date, locale.masks.title);
   if (buddhist.value) {
     titleTransform = `${titleTransform.split(' ')[0]} ${yearTransform}`;
@@ -560,8 +571,8 @@ export function getCachedPage(config: PageConfig, locale: Locale): CachedPage {
     monthTitle: titleTransform,
     shortMonthLabel: locale.formatDate(date, 'MMM'),
     monthLabel: locale.formatDate(date, 'MMMM'),
-    shortYearLabel:  yearTransform.toString().substring(2),
-    yearLabel:  yearTransform.toString(),
+    shortYearLabel: yearTransform.toString().substring(2),
+    yearLabel: yearTransform.toString(),
     monthComps,
     prevMonthComps,
     nextMonthComps,

@@ -391,10 +391,13 @@ export function createCalendarGrid(
   }
 
   function getEventsFromProps() {
-    return props.events.reduce((map, config) => {
-      map[config.key] = map[config.key] || createEventFromExisting(config);
-      return map;
-    }, {} as Record<keyof any, Event>);
+    return props.events.reduce(
+      (map, config) => {
+        map[config.key] = map[config.key] || createEventFromExisting(config);
+        return map;
+      },
+      {} as Record<keyof any, Event>,
+    );
   }
 
   function getMsFromPosition(position: number) {
