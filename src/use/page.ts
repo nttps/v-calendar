@@ -51,11 +51,10 @@ export function createPage(page: Ref<Page>) {
       const enabled = [...Array(12).keys()].some(m =>
         canMove({ month: m + 1, year }, { position }),
       );
-      year = (year + (buddhist ? 543 : 0));
       items.push({
         year,
         id: year.toString(),
-        label: year.toString(),
+        label: (year + (buddhist.value ? 543 : 0)).toString(),
         ariaLabel: year.toString(),
         isActive: year === page.value.year,
         isCurrent: year === thisYear,

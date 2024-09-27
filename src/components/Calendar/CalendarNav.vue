@@ -236,10 +236,10 @@ const lastYear = computed(() => last(yearItems.value.map(i => i.year)));
 
 const title = computed(() => {
   return monthMode.value
-    ? selectedYear.value + (buddhist ? 543 : 0)
-    : `${(firstYear.value ?? 0) + (buddhist ? 543 : 0)} - ${
-        (lastYear.value ?? 0) + (buddhist ? 543 : 0)
-      }`;
+    ? selectedYear.value + (buddhist.value ? 543 : 0)
+    : `2${(firstYear.value ?? 0) + (buddhist.value ? 543 : 0)} - ${
+        (lastYear.value ?? 0) + (buddhist.value ? 543 : 0)
+      }2`;
 });
 
 watchEffect(() => {
