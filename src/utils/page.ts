@@ -88,6 +88,7 @@ export interface Page {
   weeks: CalendarWeek[];
   viewDays: CalendarDay[];
   viewWeeks: CalendarWeek[];
+  buddhist: boolean;
 }
 
 export type PageAddress = Pick<Page, 'day' | 'week' | 'month' | 'year'>;
@@ -109,6 +110,8 @@ export type PageConfig = Pick<
   | 'showWeeknumbers'
   | 'showIsoWeeknumbers'
   | 'weeknumberPosition'
+  | 'buddhist'
+
 >;
 
 export type CachedPage = Pick<
@@ -519,6 +522,11 @@ export function getCachedPage(config: PageConfig, locale: Locale): CachedPage {
   const days = getDays({ monthComps, prevMonthComps, nextMonthComps }, locale);
   const weeks = getWeeks(days, showWeeknumbers, showIsoWeeknumbers, locale);
   const weekdayLabels = locale.getWeekdayLabels(weeks[0].days);
+  const yearTransform = year + ((config.buddhist) ? 543 : 0)
+  let titleTransform = locale.formatDate(date, locale.masks.title);
+  if (config.buddhist) {
+    titleTransform = `${titleTransform.split(' ')[0]} ${yearTransform}`;
+  }
   return {
     id: getPageKey(config),
     month,
@@ -526,8 +534,8 @@ export function getCachedPage(config: PageConfig, locale: Locale): CachedPage {
     monthTitle: locale.formatDate(date, locale.masks.title),
     shortMonthLabel: locale.formatDate(date, 'MMM'),
     monthLabel: locale.formatDate(date, 'MMMM'),
-    shortYearLabel: year.toString().substring(2),
-    yearLabel: year.toString(),
+    shortYearLabel:  yearTransform.toString().substring(2),
+    yearLabel:  yearTransform.toString(),
     monthComps,
     prevMonthComps,
     nextMonthComps,

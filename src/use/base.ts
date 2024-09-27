@@ -28,6 +28,10 @@ export const propsDef = {
   minDate: null,
   maxDate: null,
   disabledDates: null,
+  buddhist: {
+    type: Boolean,
+    default: false,
+  },
 };
 
 export type BaseProps = Readonly<ExtractPropTypes<typeof propsDef>>;

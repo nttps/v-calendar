@@ -116,6 +116,11 @@ export const propsDef = {
   dragAttribute: Object as PropType<AttributeConfig>,
   selectAttribute: Object as PropType<AttributeConfig>,
   attributes: [Object, Array],
+  buddhist: {
+    type: Boolean,
+    default: false,
+  },
+
 };
 
 export const emits = [

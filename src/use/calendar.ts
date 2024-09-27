@@ -129,6 +129,10 @@ export const propsDef = {
   attributes: Array as PropType<Array<AttributeConfig>>,
   trimWeeks: Boolean,
   disablePageSwipe: Boolean,
+  buddhist: {
+    type: Boolean,
+    default: false,
+  },
 };
 
 export const emitsDef = [
@@ -398,6 +402,7 @@ export function createCalendar(props: CalendarProps, { emit, slots }: any) {
             ...newPage,
             view: state.view,
             titlePosition: props.titlePosition,
+            buddhist: props.buddhist,
             trimWeeks: props.trimWeeks,
             position,
             row,

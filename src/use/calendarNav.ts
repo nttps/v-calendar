@@ -36,6 +36,7 @@ export type CalendarNavProps = Readonly<ExtractPropTypes<typeof propsDef>>;
 
 export const propsDef = {
   value: { type: Object as PropType<Page>, required: true },
+  buddhist: { type: Boolean, default: false}
 };
 
 export const emitsDef = ['input'];
@@ -89,7 +90,7 @@ export function createCalendarNav(props: CalendarNavProps, { emit }: any) {
       items.push({
         year,
         id: year.toString(),
-        label: year.toString(),
+        label: year  + ((props.buddhist) ? 543 : 0),
         ariaLabel: year.toString(),
         isActive: year === currentYear.value,
         isCurrent: year === thisYear,
@@ -198,8 +199,8 @@ export function createCalendarNav(props: CalendarNavProps, { emit }: any) {
 
   const title = computed(() => {
     return monthMode.value
-      ? yearIndex.value
-      : `${firstYear.value} - ${lastYear.value}`;
+      ? yearIndex.value + ((props.buddhist) ? 543 : 0)
+        : `${(firstYear.value ?? 0) + ((props.buddhist) ? 543 : 0)} - ${(lastYear.value ?? 0) + ((props.buddhist) ? 543 : 0)}`;
   });
 
   const prevMonthItemsEnabled = computed(() =>
