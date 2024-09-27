@@ -1,4 +1,3 @@
-import { useCalendar } from '@/use/calendar';
 import {
   type DateParts,
   type DateSource,
@@ -135,8 +134,6 @@ export type CachedPage = Pick<
   | 'weeks'
   | 'weekdays'
 >;
-
-const { buddhist } = useCalendar();
 
 const viewAddressKeys: Record<PageView, (keyof DateParts)[]> = {
   daily: ['year', 'month', 'day'],
@@ -377,19 +374,17 @@ function getWeeks(
     const fromDay = week.days[0];
     const toDay = week.days[week.days.length - 1];
     if (fromDay.month === toDay.month) {
-      week.title = formatWithBuddhistYear(fromDay.date, 'MMMM YYYY', locale);
+      week.title = `${locale.formatDate(fromDay.date, 'MMMM YYYY')}`;
     } else if (fromDay.year === toDay.year) {
-      week.title = `${formatWithBuddhistYear(
+      week.title = `${locale.formatDate(
         fromDay.date,
         'MMM',
-        locale,
-      )} - ${formatWithBuddhistYear(toDay.date, 'MMM YYYY', locale)}`;
+      )} - ${locale.formatDate(toDay.date, 'MMM YYYY')}`;
     } else {
-      week.title = `${formatWithBuddhistYear(
+      week.title = `${locale.formatDate(
         fromDay.date,
         'MMM YYYY',
-        locale,
-      )} - ${formatWithBuddhistYear(toDay.date, 'MMM YYYY', locale)}`;
+      )} - ${locale.formatDate(toDay.date, 'MMM YYYY')}`;
     }
   });
   return result;
