@@ -54,7 +54,7 @@ export function createPage(page: Ref<Page>) {
       items.push({
         year,
         id: year.toString(),
-        label: (year + (buddhist.value ? 543 : 0)).toString(),
+        label: (Number(year) + (buddhist.value ? 543 : 0)).toString(),
         ariaLabel: year.toString(),
         isActive: year === page.value.year,
         isCurrent: year === thisYear,
