@@ -326,18 +326,6 @@ function getDays(
   return days;
 }
 
-function formatWithBuddhistYear(date: Date, format: string, locale: Locale) {
-
-  const formattedDate = locale.formatDate(date, format);
-  const year = date.getFullYear();
-  const buddhistYear = year + (buddhist.value ? 543 : 0);
-
-  // Replace the Gregorian year with the Buddhist year if the `buddhist` flag is true
-  return buddhist
-    ? formattedDate.replace(year.toString(), buddhistYear.toString())
-    : formattedDate;
-}
-
 function getWeeks(
   days: CalendarDay[],
   showWeeknumbers: boolean,
@@ -553,21 +541,15 @@ export function getCachedPage(config: PageConfig, locale: Locale): CachedPage {
   const days = getDays({ monthComps, prevMonthComps, nextMonthComps }, locale);
   const weeks = getWeeks(days, showWeeknumbers, showIsoWeeknumbers, locale);
   const weekdays = getWeekdays(weeks[0], locale);
-  const yearTransform = year + (buddhist.value ? 543 : 0);
-  let titleTransform = locale.formatDate(date, locale.masks.title);
-  if (buddhist.value) {
-    titleTransform = `${titleTransform.split(' ')[0]} ${yearTransform}`;
-  }
-
   return {
     id: getPageKey(config),
     month,
     year,
-    monthTitle: titleTransform,
-    shortMonthLabel: locale.formatDate(date, 'MMM'),
-    monthLabel: locale.formatDate(date, 'MMMM'),
-    shortYearLabel: yearTransform.toString().substring(2),
-    yearLabel: yearTransform.toString(),
+    monthTitle: locale.formatDate(date, locale.masks.title),
+    shortMonthLabel: locale.formatDate(date, 'MMM 2'),
+    monthLabel: locale.formatDate(date, 'MMMM 2'),
+    shortYearLabel: year.toString().substring(2),
+    yearLabel: `${year.toString()}${year.toString()}`,
     monthComps,
     prevMonthComps,
     nextMonthComps,
