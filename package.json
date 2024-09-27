@@ -1,7 +1,7 @@
 {
   "name": "nuxt-calendar-ckc",
   "type": "module",
-  "version": "1.3.0",
+  "version": "1.3.1",
   "description": "A calendar and date picker plugin for Vue.js.",
   "author": "Nateetorn Preansri <teamerze@gmail.com>",
   "repository": {
