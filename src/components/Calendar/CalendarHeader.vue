@@ -65,6 +65,7 @@ const {
   movePrev,
   canMoveNext,
   moveNext,
+  isBuddhist
 } = useCalendar();
 
 const navPlacement = computed(() => {
@@ -79,6 +80,12 @@ const navPlacement = computed(() => {
 });
 const navPopoverOptions = computed(() => {
   const { page } = props;
+
+  if(isBuddhist) {
+    page.title = page.title + ' พ.ศ.';
+  }
+
+
   return {
     id: navPopoverId.value,
     visibility: navVisibility.value,
