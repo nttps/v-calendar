@@ -20,7 +20,7 @@
       <CalendarSlot name="header-title-wrapper">
         <button type="button" class="vc-title" v-popover="navPopoverOptions">
           <CalendarSlot name="header-title" :title="page.title">
-            <span>{{ page.title }} 5</span>
+            <span>{{ page.title }}</span>
           </CalendarSlot>
         </button>
       </CalendarSlot>
@@ -80,11 +80,6 @@ const navPlacement = computed(() => {
 });
 const navPopoverOptions = computed(() => {
   const { page } = props;
-
-  if(isBuddhist) {
-    page.title = page.title + ' พ.ศ.';
-  }
-
 
   return {
     id: navPopoverId.value,

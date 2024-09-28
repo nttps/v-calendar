@@ -320,11 +320,13 @@ const formatFlags: any = {
   MMMM(d: DateParts, l: Locale) {
     return l.monthNames[d.month - 1];
   },
-  YY(d: DateParts) {
-    return String(d.year).substr(2);
+  YY(d: DateParts, l: Locale) {
+    const year = l.id === 'th-TH' ? d.year + 543 : d.year;
+    return String(year).substr(2);
   },
-  YYYY(d: DateParts) {
-    return pad(d.year, 4);
+  YYYY(d: DateParts, l: Locale) {
+    const year = l.id === 'th-TH' ? d.year + 543 : d.year;
+    return pad(year, 4);
   },
   h(d: DateParts) {
     return d.hours % 12 || 12;
