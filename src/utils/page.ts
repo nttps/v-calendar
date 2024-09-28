@@ -1,4 +1,3 @@
-import { useCalendar } from '@/use/calendar';
 import {
   type DateParts,
   type DateSource,
@@ -327,57 +326,40 @@ function getDays(
   return days;
 }
 
-const { isBuddhist} = useCalendar();
-
-function formatWithBuddhistYear(date: Date, format: string, locale: Locale) {
-
-  const formattedDate = locale.formatDate(date, format);
-  const year = date.getFullYear();
-  const buddhistYear = year + (isBuddhist ? 543 : 0);
-
-  // Replace the Gregorian year with the Buddhist year if the `buddhist` flag is true
-  return isBuddhist
-    ? formattedDate.replace(year.toString(), buddhistYear.toString())
-    : formattedDate;
-}
-
 function getWeeks(
   days: CalendarDay[],
   showWeeknumbers: boolean,
   showIsoWeeknumbers: boolean,
   locale: Locale,
 ): CalendarWeek[] {
-  const result = days.reduce(
-    (result: CalendarWeek[], day: CalendarDay, i) => {
-      const weekIndex = Math.floor(i / 7);
-      let week = result[weekIndex];
-      if (!week) {
-        week = {
-          id: `week-${weekIndex + 1}`,
-          title: '',
-          week: day.week,
-          weekPosition: day.weekPosition,
-          weeknumber: day.weeknumber,
-          isoWeeknumber: day.isoWeeknumber,
-          weeknumberDisplay: showWeeknumbers
-            ? day.weeknumber
-            : showIsoWeeknumbers
-            ? day.isoWeeknumber
-            : undefined,
-          days: [],
-        };
-        result[weekIndex] = week;
-      }
-      week.days.push(day);
-      return result;
-    },
-    Array(days.length / daysInWeek),
-  );
+  const result = days.reduce((result: CalendarWeek[], day: CalendarDay, i) => {
+    const weekIndex = Math.floor(i / 7);
+    let week = result[weekIndex];
+    if (!week) {
+      week = {
+        id: `week-${weekIndex + 1}`,
+        title: '',
+        week: day.week,
+        weekPosition: day.weekPosition,
+        weeknumber: day.weeknumber,
+        isoWeeknumber: day.isoWeeknumber,
+        weeknumberDisplay: showWeeknumbers
+          ? day.weeknumber
+          : showIsoWeeknumbers
+          ? day.isoWeeknumber
+          : undefined,
+        days: [],
+      };
+      result[weekIndex] = week;
+    }
+    week.days.push(day);
+    return result;
+  }, Array(days.length / daysInWeek));
   result.forEach(week => {
     const fromDay = week.days[0];
     const toDay = week.days[week.days.length - 1];
     if (fromDay.month === toDay.month) {
-      week.title = `${formatWithBuddhistYear(fromDay.date, 'MMMM YYYY', locale)}`;
+      week.title = `${locale.formatDate(fromDay.date, 'MMMM YYYY')}`;
     } else if (fromDay.year === toDay.year) {
       week.title = `${locale.formatDate(
         fromDay.date,
@@ -548,7 +530,6 @@ export function getPageKey(config: PageConfig) {
 
 export function getCachedPage(config: PageConfig, locale: Locale): CachedPage {
   const { month, year, showWeeknumbers, showIsoWeeknumbers } = config;
-
   const date = new Date(year, month - 1, 15);
   const monthComps = locale.getMonthParts(month, year);
   const prevMonthComps = locale.getPrevMonthParts(month, year);
@@ -561,10 +542,10 @@ export function getCachedPage(config: PageConfig, locale: Locale): CachedPage {
     month,
     year,
     monthTitle: locale.formatDate(date, locale.masks.title),
-    shortMonthLabel: locale.formatDate(date, 'MMM 2'),
-    monthLabel: locale.formatDate(date, 'MMMM 2'),
+    shortMonthLabel: locale.formatDate(date, 'MMM'),
+    monthLabel: locale.formatDate(date, 'MMMM'),
     shortYearLabel: year.toString().substring(2),
-    yearLabel: `${year.toString()}${year.toString()}`,
+    yearLabel: year.toString(),
     monthComps,
     prevMonthComps,
     nextMonthComps,
@@ -576,7 +557,6 @@ export function getCachedPage(config: PageConfig, locale: Locale): CachedPage {
 
 export function getPage(config: PageConfig, cachedPage: CachedPage) {
   const { day, week, view, trimWeeks } = config;
-  console.log(view)
   const page: Page = {
     ...cachedPage,
     ...config,
@@ -621,6 +601,5 @@ export function getPage(config: PageConfig, cachedPage: CachedPage) {
       break;
     }
   }
-  console.log(page.title)
   return page;
 }

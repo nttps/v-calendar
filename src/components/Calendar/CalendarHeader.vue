@@ -20,7 +20,7 @@
       <CalendarSlot name="header-title-wrapper">
         <button type="button" class="vc-title" v-popover="navPopoverOptions">
           <CalendarSlot name="header-title" :title="page.title">
-            <span>{{ page.title }}</span>
+            <span>{{ page.title }} 5</span>
           </CalendarSlot>
         </button>
       </CalendarSlot>
